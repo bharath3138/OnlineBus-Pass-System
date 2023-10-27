@@ -2,7 +2,7 @@
 
 The Online Bus Pass Application System is a web-based platform designed to streamline the process of applying for and managing bus passes. This system provides an efficient and user-friendly way for passengers to access and renew their bus passes, while also assisting transport authorities in managing applications.
 
-# #Features
+# Features
 
 - **User Registration**: Easy user account creation with secure authentication.
 
@@ -16,7 +16,7 @@ The Online Bus Pass Application System is a web-based platform designed to strea
   
 - **Reporting and Analytics**: Generate reports for application statistics and route optimization.
 
-# # Installation
+# Installation
 
 1. Clone the repository: `git clone https://https://github.com/bharath3138/OnlineBus-Pass-System'
 
@@ -26,21 +26,21 @@ The Online Bus Pass Application System is a web-based platform designed to strea
 
 4. Visit `localhost:http://127.0.0.1:5000` in your web browser.
 
-# # Technologies Used
+# Technologies Used
 
 - Python Flask for the backend.
 - HTML , CSS , JavaScript for the frontend.
 - SQLite3 for database storage.
 
 
-# # Azure services
+# Azure services
 -App services
 -Azure monitor
 
 
 
-# # Demo video URl
-'https://onlinebpm.blob.core.windows.net/demovideo/Recording 2023-10-27 135041.mp4'
+# Demo video URl
+'https://drive.google.com/file/d/1uojDog9EhPySWjy02fIwP7UMib-Be4J4/view'
  
 # Demo Url
 https://buspasstn.azurewebsites.net/
