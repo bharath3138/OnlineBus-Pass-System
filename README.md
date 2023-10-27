@@ -40,10 +40,24 @@ The Online Bus Pass Application System is a web-based platform designed to strea
 
 
 # # Demo video URl
-'https://drive.google.com/file/d/1gO9HOSLl-02XmHtEYTE7Sj3CfqPE3G4X/view?usp=drivesdk'
-
+'https://onlinebpm.blob.core.windows.net/demovideo/Recording 2023-10-27 135041.mp4'
+ 
 # Demo Url
 https://buspasstn.azurewebsites.net/
 
-#demo Image
+# Demo Image
 
+
+![Login](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/2f57be1e-4606-4c22-a9fc-bcd4d7903769)
+
+![dashboard](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/70ef84f8-e9a2-4fb2-896a-f497f746d0aa)
+
+![application page](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/1f93aa37-463d-4135-9c60-f75836dd0642)
+
+![application](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/da87a29a-ed79-4d0c-89a0-08cb3b6d8dff)
+
+![submission](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/f862edb9-923f-470b-a2af-a88e2ae0319d)
+
+![payment](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/66e40d22-aca0-4ddb-baa6-da781965d3c5)
+
+![e_pass](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/0e90b9bc-5229-43cd-bf4c-bf305c087801)
