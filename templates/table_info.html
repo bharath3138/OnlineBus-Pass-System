@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Information</title>
+</head>
+<body>
+    <h1>Table Information</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Column Name</th>
+                <th>Data Type</th>
+                <th>Nullable</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for column in table_info %}
+            <tr>
+                <td>{{ column[1] }}</td>
+                <td>{{ column[2] }}</td>
+                <td>{{ column[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

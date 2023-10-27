@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bus Pass Application</title>
+</head>
+<body>
+    
+    <nav class="navbar" id="navbar">
+        <ul class="nav-list">
+            <li><a href="#" id="help"><b>Help</b></a></li>
+        </ul>
+        <ul class="nav-list">
+            <li><a href="#" id="home"><b>Home</b></a></li>
+            <li><a href="#" id="features"><b>Features</b></a></li>
+            <li><a href="#" id="profile"><b>Profile</b></a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <div class="form-container">
+            <div class="form-header">
+                <h1 style="color:white">Renew Pass or Apply for a New Pass</h1>
+            </div>
+            <div class="form-buttons">
+                <button id="renew-form"><b>Renew Pass</b></button>
+                <button id="new-application-form"><b>New Application</b></button>
+            </div>
+            <div class="form-content">
+                <!-- Renew Pass Form -->
+                <form id="renewal-details" action="/payment" method="POST">
+                    <label for="pass_id">Pass ID:</label>
+                    <input type="text" id="pass_id" name="pass_id" required>
+                    <button type="submit">Submit Renewal</button>
+                </form>
+                
+                
+                <!-- New Application Form -->
+                <form id="new-application" class="hidden" action="/new-application" method="POST">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required>
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label for="mobile">Mobile Number:</label>
+                    <input type="tel" id="mobile" name="mobile" required>
+                    <label for="email">Email (optional):</label>
+                    <input type="email" id="email" name="email">
+                    <label for="adhar">Adhar Card Number:</label>
+                    <input type="text" id="adhar" name="adhar" required>
+                    <label for="residence">Resident Address:</label>
+                    <textarea id="residence" name="residence" required></textarea>
+                    <label for="permanent">Permanent Address:</label>
+                    <textarea id="permanent" name="permanent" required></textarea>
+                    <label for="pass-type">Select Pass Type:</label>
+                    <select id="pass-type" name="pass-type" required>
+                        <option value="student">Student Pass</option>
+                        <option value="1000">1000 Pass</option>
+                    </select>
+                    <button type="submit">Submit Application</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+    <style>
+        /* Header styles */
+        .form-header h1 {
+            font-size: 24px;
+            color: #FF0000; /* Red text color */
+            text-align: center;
+            /* Check for padding or margin issues */
+            text-decoration: underline;
+            margin-top: 65px;
+            margin-bottom: 40px;
+            padding: 40; /* Remove any padding */
+        }
+
+        /* Container styles */
+        .container {
+            /* Check for overflow and height constraints */
+            overflow: hidden; /* Change to "visible" or "scroll" if necessary */
+            height: auto; /* Allow the container to adjust its height as needed */
+        }
+
+    
+        /* Navigation bar styles */
+        .nav-list {
+            list-style-type:disc;
+            display: flex;
+            padding: 5; /* Remove default padding */
+        }
+
+        .nav-list li {
+            margin-right: 20px;
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color:whitesmoke; /* Red background color */
+            color: black; /* Black text color */
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Right-align the second ul with flex-grow */
+        .nav-list:last-child {
+            flex-grow: 1;
+            justify-content: flex-end;
+        }
+
+        /* Add animation styles */
+        .navbar.hidden {
+            transform: translateY(-100%);
+            opacity: 10;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-list a {
+            text-decoration: none;
+            color: black;
+            position:sticky;
+            padding: 10px 20px; /* Add padding to make the buttons clickable */
+            border-radius: 5px; /* Add rounded corners to buttons */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Add button animation */
+        }
+
+        .nav-list a::before {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: transparent; /* No underline initially */
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-list a:hover {
+            background-color: #ff99cc; /* Red background color on hover */
+            color: #000000; /* Black text color on hover */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Button animation on hover */
+        }
+
+        .nav-list a:hover::before {
+            transform: scaleX(1);
+            background-color: #000000; /* Black underline color on hover */
+            transition: transform 0.3s ease, background-color 0.3s ease; /* Underline animation on hover */
+        }
+
+    
+        /* Form styles */
+        .form-container {
+            background: linear-gradient(45deg, #33ccff, #ff99cc, #33ccff, #ff99cc);
+            border-radius: 5px;
+            animation: gradientAnimation 15s ease infinite;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #000000; /* Black text color */
+            
+        }
+    
+        .form-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: whitesmoke; /* Black button background color */
+            color: rgb(0, 0, 0); /* Red button text color */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+    
+        .form-buttons button:hover {
+            background-color:  #ff99cc; /* Dark red button background color on hover */
+        }
+    
+        /* Form animations */
+        .form-content form {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+    
+        .form-content form.active {
+            opacity: 1;
+            transform: translateY(0);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+        }
+    
+        /* Style for New Application form */
+        .renew-form,
+        #new-application {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 15px;
+            overflow: auto;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            color: #000000; /* Black text color */
+        }
+
+        .renew-form label,
+        #new-application label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #000000; /* Black text color */
+        }
+
+        .renew-form input[type="text"],
+        .renew-form input[type="date"],
+        #new-application input[type="text"],
+        #new-application input[type="number"],
+        #new-application input[type="date"],
+        #new-application select,
+        #new-application textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f0f0f0; /* Form input background color */
+            color: #000000; /* Black text color */
+        }
+
+        .renew-form button[type="submit"],
+        #new-application button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .renew-form button[type="submit"]:hover,
+        #new-application button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Animation for the gradient background */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+    </style>
+    
+
+    <script>
+        document.getElementById("renew-form").addEventListener("click", function () {
+        showForm("renewal-details");
+    });
+
+    document.getElementById("new-application-form").addEventListener("click", function () {
+        showForm("new-application");
+    });
+
+    function showForm(formId) {
+        const forms = document.querySelectorAll(".form-content form");
+        forms.forEach((form) => {
+            form.classList.remove("active");
+        });
+
+        document.getElementById(formId).classList.add("active");
+    }
+    
+        // JavaScript for animating the navigation bar
+        const navbar = document.getElementById("navbar");
+        let prevScrollPos = window.pageYOffset;
+        const hideOffset = 50; // Adjust this value as needed
+    
+        window.addEventListener("scroll", () => {
+            const currentScrollPos = window.pageYOffset;
+            if (currentScrollPos > prevScrollPos + hideOffset) {
+                // Scrolling down, hide the navbar
+                navbar.style.transform = "translateY(-100%)";
+                navbar.style.opacity = "0";
+            } else if (currentScrollPos < prevScrollPos - hideOffset || currentScrollPos <= 0) {
+                // Scrolling up or at the top, show the navbar
+                navbar.style.transform = "translateY(0)";
+                navbar.style.opacity = "1";
+            }
+            prevScrollPos = currentScrollPos;
+        });
+    
+    </script>
+</body>
+</html>

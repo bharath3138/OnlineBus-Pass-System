@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bus Pass Application</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(45deg, #33ccff, #ff99cc, #33ccff, #ff99cc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Container styles */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            border-radius: 8px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Left side (Login Form) styles */
+        .login-section {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #3e54e0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .input-block {
+            margin-bottom: 20px;
+        }
+
+        .input-block label {
+            font-size: 14px;
+            color: #3e54e0;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-block input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-login {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #3e54e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            background-color: #2a3f9d; /* Change the color on hover */
+        }
+
+        /* Right side (Registration Form) styles */
+        .register-section {
+            display: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Admin Login styles */
+        .admin-login-section {
+            display: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Admin Registration Form */
+        .admin-register-section {
+            display: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Styling for the "New User" and "Admin" links */
+        .link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link {
+            color: #3e54e0;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .link:hover {
+            color: #27ae60;
+            background-color: #f4f4f4;
+        }
+
+        .active-link {
+            color: #27ae60;
+            background-color: #f4f4f4;
+        }
+
+        /* Animation for the gradient background */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Bus Pass Application</h1>
+    <div class="container">
+        <section class="login-section">
+            <h2 class="section-title">Login</h2>
+            <div class="form-container">
+                <form class="form form-login" method="POST" action="{{ url_for('login') }}" autocomplete="off" onsubmit="return validateLoginForm()">
+                    <div class="input-block">
+                        <label for="login-email">E-mail</label>
+                        <input id="login-email" type="email" name="login-email" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="login-password">Password</label>
+                        <input id="login-password" type="password" name="login-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+            </div>
+            <p class="link-container">
+                <a href="#" class="link" onclick="showRegisterForm()">New User? Register</a>
+                <a href="#" class="link" onclick="showAdminLoginForm()">Admin</a>
+            </p>
+        </section>
+        <section class="register-section">
+            <h2 class="section-title">Register</h2>
+            <div class="form-container">
+                <form class="form form-register" method="POST" action="{{ url_for('register') }}" autocomplete="off" onsubmit="return validateRegisterForm()">
+                    <div class="input-block">
+                        <label for="register-name">Full Name</label>
+                        <input id="register-name" type="text" name="register-name" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="register-email">E-mail</label>
+                        <input id="register-email" type="email" name="register-email" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="register-password">Password</label>
+                        <input id="register-password" type="password" name="register-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Register</button>
+                </form>
+            </div>
+            <p class="link-container">
+                <a href="#" class="link" onclick="showLoginForm()">Already have an account? Login</a>
+                <a href="#" class="link" onclick="showAdminLoginForm()">Admin</a>
+            </p>
+        </section>
+        <section class="admin-login-section">
+            <h2 class="section-title">Admin Login</h2>
+            <div class="form-container">
+                <form class="form form-admin-login" method="POST" action="{{ url_for('admin_login') }}" onsubmit="return validateAdminLoginForm()">
+                    <div class="input-block">
+                        <label for="admin-login-username">Username</label>
+                        <input id="admin-login-username" type="text" name="admin-login-mail" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="admin-login-password">Password</label>
+                        <input id="admin-login-password" type="password" name="admin-login-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Admin Login</button>
+                </form>
+            </div>
+            <p class="link-container">
+                <a href="#" class="link" onclick="showLoginForm()">Back to User Login</a>
+                <a href="#" class="link" onclick="showAdminRegisterForm()">Register as admin</a>
+            </p>
+        </section>
+        <!-- Admin Registration Form -->
+        <section class="admin-register-section">
+            <h2 class="section-title">Admin Registration</h2>
+            <div class="form-container">
+                <form class="form form-admin-register" method="POST" action="{{ url_for('admin_register') }}" onsubmit="return validateAdminRegisterForm()">
+                    <div class="input-block">
+                        <label for="admin-register-email">E-mail</label>
+                        <input id="admin-register-email" type="email" name="admin-register-email" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="admin-register-password">Password</label>
+                        <input id="admin-register-password" type="password" name="admin-register-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Register as Admin</button>
+                </form>
+            </div>
+            <p class="link-container">
+                <a href="#" class="link" onclick="showAdminLoginForm()">Back to Admin Login</a>
+            </p>
+        </section>
+    </div>
+
+    <script>
+        // Your JavaScript code here
+        function validateLoginForm() {
+            const loginEmail = document.getElementById("login-email").value;
+            const loginPassword = document.getElementById("login-password").value;
+
+            // Replace this with your actual validation logic
+            if (loginEmail === "" || loginPassword === "") {
+                alert("Please fill in all fields.");
+                return false; // Prevent form submission
+            }
+
+            // You can add more validation checks here as needed
+
+            // If all checks pass, allow form submission
+            return true;
+        }
+
+        function validateRegisterForm() {
+            const registerName = document.getElementById("register-name").value;
+            const registerEmail = document.getElementById("register-email").value;
+            const registerPassword = document.getElementById("register-password").value;
+
+            // Replace this with your actual validation logic
+            if (registerName === "" || registerEmail === "" || registerPassword === "") {
+                alert("Please fill in all fields.");
+                return false; // Prevent form submission
+            }
+
+            // You can add more validation checks here as needed
+
+            // If all checks pass, allow form submission
+            return true;
+        }
+
+        function validateAdminLoginForm() {
+            const adminUsername = document.getElementById("admin-login-username").value;
+            const adminPassword = document.getElementById("admin-login-password").value;
+
+            // Replace this with your actual admin validation logic
+            if (adminUsername === "" || adminPassword === "") {
+                alert("Please fill in all fields.");
+                return false; // Prevent form submission
+            }
+
+            // You can add more admin validation checks here as needed
+
+            // If all checks pass, allow admin login
+            return true;
+        }
+
+        function validateAdminRegisterForm() {
+            const adminRegisterEmail = document.getElementById("admin-register-email").value;
+            const adminRegisterPassword = document.getElementById("admin-register-password").value;
+
+            // Replace this with your actual admin registration validation logic
+            if (adminRegisterEmail === "" || adminRegisterPassword === "") {
+                alert("Please fill in all fields.");
+                return false; // Prevent form submission
+            }
+
+            // You can add more admin registration validation checks here as needed
+
+            // If all checks pass, allow admin registration
+            return true;
+        }
+
+        function clearFormFields() {
+            const formFields = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"]');
+            formFields.forEach(function (field) {
+                field.value = '';
+            });
+        }
+
+        // Clear form fields on page load to prevent auto-fill
+        window.onload = clearFormFields;
+
+        function showRegisterForm() {
+            document.querySelector(".login-section").style.display = "none";
+            document.querySelector(".register-section").style.display = "block";
+            document.querySelector(".admin-login-section").style.display = "none";
+            document.querySelector(".admin-register-section").style.display = "none";
+            clearFormFields();
+        }
+
+        function showLoginForm() {
+            document.querySelector(".login-section").style.display = "block";
+            document.querySelector(".register-section").style.display = "none";
+            document.querySelector(".admin-login-section").style.display = "none";
+            document.querySelector(".admin-register-section").style.display = "none";
+            clearFormFields();
+        }
+
+        function showAdminLoginForm() {
+            document.querySelector(".login-section").style.display = "none";
+            document.querySelector(".register-section").style.display = "none";
+            document.querySelector(".admin-login-section").style.display = "block";
+            document.querySelector(".admin-register-section").style.display = "none";
+            clearFormFields();
+        }
+
+        function showAdminRegisterForm() {
+        document.querySelector(".login-section").style.display = "none";
+        document.querySelector(".register-section").style.display = "none";
+        document.querySelector(".admin-login-section").style.display = "none";
+        document.querySelector(".admin-register-section").style.display = "block"; 
+        clearFormFields();
+    }
+        
+    </script>
+</body>
+</html>

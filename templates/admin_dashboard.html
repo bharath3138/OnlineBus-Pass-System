@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        main {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+            {% for message in messages %}
+                <li class="flash-message {{ message[1] }}">{{ message[0] }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <main>
+        <div class="button-container">
+            <a href="{{ url_for('view_registered_data') }}" class="button">View Registered Data</a>
+            <a href="{{ url_for('view_applicant_data') }}" class="button">View Applicant Data</a>
+        </div>
+        <h2>Registered Data:</h2>
+        <table>
+            <tr>
+                <th>S.No</th>
+                <th>Username</th>
+            </tr>
+            {% for user in user_data %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <h2>Applicant Data:</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Mobile No</th>
+                <th>Email ID</th>
+                <th>Adhaar No</th>
+                <th>Residence Address</th>
+                <th>Permanent Address</th>
+                <th>Pass Type</th>
+            </tr>
+            {% for applicant in applicant_data %}
+                <tr>
+                    <td>{{ applicant[0] }}</td>
+                    <td>{{ applicant[1] }}</td>
+                    <td>{{ applicant[2] }}</td>
+                    <td>{{ applicant[3] }}</td>
+                    <td>{{ applicant[4] }}</td>
+                    <td>{{ applicant[5] }}</td>
+                    <td>{{ applicant[6] }}</td>
+                    <td>{{ applicant[7] }}</td>
+                    <td>{{ applicant[8] }}</td>
+                    <td>{{ applicant[9] }}</td>
+                    <td>{{ applicant[10] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </main>
+</body>
+</html>
