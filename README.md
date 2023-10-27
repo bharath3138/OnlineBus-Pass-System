@@ -18,7 +18,7 @@ The Online Bus Pass Application System is a web-based platform designed to strea
 
 # # Installation
 
-1. Clone the repository: `git clone https://-apgithub.com/bharath3138/bus-passplication.git`
+1. Clone the repository: `git clone https://https://github.com/bharath3138/OnlineBus-Pass-System'
 
 2. Install dependencies: `Flask`
 
