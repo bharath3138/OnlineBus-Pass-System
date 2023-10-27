@@ -36,8 +36,14 @@ The Online Bus Pass Application System is a web-based platform designed to strea
 # # Azure services
 -App services
 -Azure monitor
--Custum DNS
 
 
-# # Demo video
+
+# # Demo video URl
 'https://drive.google.com/file/d/1gO9HOSLl-02XmHtEYTE7Sj3CfqPE3G4X/view?usp=drivesdk'
+
+# Demo Url
+https://buspasstn.azurewebsites.net/
+
+#demo Image
+
