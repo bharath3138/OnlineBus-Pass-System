@@ -9,12 +9,11 @@
     
     <nav class="navbar" id="navbar">
         <ul class="nav-list">
-            <li><a href="#" id="help"><b>Help</b></a></li>
+            <li><a href="/dashboard#contact" id="help"><b>Help</b></a></li>
         </ul>
         <ul class="nav-list">
-            <li><a href="#" id="home"><b>Home</b></a></li>
-            <li><a href="#" id="features"><b>Features</b></a></li>
-            <li><a href="#" id="profile"><b>Profile</b></a></li>
+            <li><a href="/dashboard#introduction" id="home"><b>Home</b></a></li>
+            <li><a href="/dashboard#work" id="features"><b>Features</b></a></li>
         </ul>
     </nav>
     <div class="content">
@@ -22,6 +21,16 @@
             <div class="form-header">
                 <h1 style="color:white">Renew Pass or Apply for a New Pass</h1>
             </div>
+            <!-- Add this block to display flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <ul class="flashes">
+                  {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
             <div class="form-buttons">
                 <button id="renew-form"><b>Renew Pass</b></button>
                 <button id="new-application-form"><b>New Application</b></button>
@@ -31,8 +40,15 @@
                 <form id="renewal-details" action="/payment" method="POST">
                     <label for="pass_id">Pass ID:</label>
                     <input type="text" id="pass_id" name="pass_id" required>
-                    <button type="submit">Submit Renewal</button>
-                </form>
+                    <button type="submit" style="background-color: #007BFF; color: white; border: none; padding: 10px 20px; font-size: 16px; margin-top: 20px; cursor: pointer; transition: background-color 0.3s ease;">
+                        Submit Renewal
+                    </button>
+                    <style>
+                        button:hover {
+                            background-color: #0056b3; /* Change the background color on hover */
+                        }
+                    </style>
+                    </form>
                 
                 
                 <!-- New Application Form -->
@@ -64,6 +80,10 @@
                         <option value="student">Student Pass</option>
                         <option value="1000">1000 Pass</option>
                     </select>
+                    <!-- Add this code to allow image upload -->
+                    <label for="passenger-sign">Upload Passenger Sign Image:</label>
+                    <input type="file" id="passenger-sign" name="passenger-sign" accept="image/*">
+
                     <button type="submit">Submit Application</button>
                 </form>
             </div>
@@ -322,7 +342,14 @@
             }
             prevScrollPos = currentScrollPos;
         });
-    
+        
+        window.onload = function() {
+        const target = "{{ target_section }}";
+        const element = document.getElementById(target);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
     </script>
 </body>
 </html>
