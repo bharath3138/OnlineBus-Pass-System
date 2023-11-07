@@ -48,10 +48,10 @@ Visit  http://127.0.0.1:5000 in your web browser.
 **Azure Backup :** Our Online Bus Pass Application System utilizes Azure Backup, a reliable and secure cloud-based backup service provided by Microsoft Azure. Azure Backup allows us to protect our application data, configuration settings, and other critical resources in case of accidental deletions, hardware failures, or other unforeseen incidents.
 
 # Demo
-# Demo URL: obpm.azurewebsites.net
+# Demo URL:[ obpm.azurewebsites.net](https://obpm.azurewebsites.net/)
 
 # Demo Video:
-# https://youtu.be/Dt2sL_gJr8c?si=coyvQ9VMhxaM28h4
+ https://youtu.be/Dt2sL_gJr8c?si=coyvQ9VMhxaM28h4
 # Demo Images: 
 ![resource group](https://github.com/bharath3138/OnlineBus-Pass-System/assets/113931834/5530f698-85bc-4dcc-b6d5-a1673b5831e0)
 
