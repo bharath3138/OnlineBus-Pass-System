@@ -45,8 +45,10 @@ Visit http://localhost:5000 in your web browser.
 
 **Azure Monitor:** Azure Monitor provides comprehensive monitoring and analytics for your applications and infrastructure. It helps in collecting, analyzing, and acting on telemetry data from your applications and services.
 
+**Azure Backup :** Our Online Bus Pass Application System utilizes Azure Backup, a reliable and secure cloud-based backup service provided by Microsoft Azure. Azure Backup allows us to protect our application data, configuration settings, and other critical resources in case of accidental deletions, hardware failures, or other unforeseen incidents.
+
 # Demo
-Demo URL: obpm.azurewebsites.net
+# Demo URL: obpm.azurewebsites.net
 
 # Demo Video:
 
