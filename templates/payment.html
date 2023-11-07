@@ -100,32 +100,10 @@
             <label for="amount">Amount to Pay:</label>
             <input type="text" id="amount" name="amount" required>
 
-            <button id="payment-button" onclick="makePayment()">Make Payment</button>
+            <input type="hidden" name="pass_id" value="{{ pass_id }}"> <!-- Hidden input for pass_id -->
 
+            <button type="submit">Make Payment</button> <!-- Use type="submit for form submission -->
         </form>
     </div>
-
-    <script>
-        function makePayment() {
-          var passId = "your_pass_id_value";  // Get the pass ID from the form or another source
-          
-          // Send an AJAX request to the server
-          $.ajax({
-            url: "/payment",
-            type: "POST",
-            data: { pass_id: passId },
-            success: function (data) {
-              // Handle the response from the server
-              console.log(data);  // Log the response for debugging
-              // You can update the page or show a message here based on the response
-            },
-            error: function (error) {
-              console.error("Error:", error);  // Log any errors for debugging
-            },
-          });
-        }
-      </script>
-      
-      
 </body>
 </html>

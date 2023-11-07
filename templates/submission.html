@@ -3,14 +3,43 @@
 <head>
     <title>Application Submission</title>
     <style>
-        /* CSS for the animation */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent horizontal scrolling */
+        }
+
+        /* Sea wave background animation */
+        .sea-wave-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Move the background behind the content */
+            background: linear-gradient(45deg, #33ccff, #ff99cc, #33ccff, #ff99cc);
+            background-size: 200% 100%;
+            animation: waveAnimation 5s linear infinite;
+        }
+
+        @keyframes waveAnimation {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: -100% 0;
+            }
         }
 
         .fade-in {
             animation: fadeIn 1s ease-in;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* This makes the container take the full viewport height */
         }
 
         /* Style for the "Make Payment" button */
@@ -29,10 +58,11 @@
     </style>
 </head>
 <body>
+    <div class="sea-wave-bg"></div>
     <div class="fade-in">
         <h1>Application Submitted Successfully!</h1>
-        <p>Your application has been submitted. Please proceed to make a payment.</p>
-        <a href="{{ url_for('payment') }}" class="btn btn-primary">Make Payment</a>
+        <p>Your application has been submitted.</p>
+        <a href="{{ url_for('payment', pass_id=pass_id) }}" class="btn btn-primary">Proceed to Payment</a>
     </div>
 </body>
 </html>

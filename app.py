@@ -3,7 +3,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import string
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -44,17 +44,17 @@ def init_applicant_db():
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS applicants (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            age INTEGER NOT NULL,
-            dob TEXT NOT NULL,
-            gender TEXT NOT NULL,
-            mobile TEXT NOT NULL,
-            email TEXT NOT NULL,
-            adhar TEXT NOT NULL,
-            residence TEXT NOT NULL,
-            permanent TEXT NOT NULL,
-            pass_type TEXT NOT NULL
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        age INTEGER NOT NULL,
+        dob TEXT NOT NULL,
+        gender TEXT NOT NULL,
+        mobile TEXT NOT NULL,
+        email TEXT NOT NULL,
+        adhar TEXT NOT NULL,
+        residence TEXT NOT NULL,
+        permanent TEXT NOT NULL,
+        pass_type TEXT NOT NULL
         )
     ''')
     conn.commit()
@@ -75,20 +75,17 @@ def init_payment_db():
     conn.commit()
     conn.close()
 
-def handle_db_error(func):
-    try:
-        return func()
-    except Exception as e:
-        flash("An error occurred while processing your request.", 'danger')
-
 def generate_unique_id(prefix, length=4):
     random_number = ''.join(random.choice(string.digits) for _ in range(length))
     return f"{prefix}{random_number}"
 
-init_register_db()
-init_admin_db()
-init_applicant_db()
-init_payment_db()
+def fetch_pass_details(pass_id):
+    conn = sqlite3.connect(DB_APPLICANT_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM applicants WHERE id = ?", (pass_id,))
+    pass_details = cursor.fetchone()
+    conn.close()
+    return pass_details
 
 @app.route('/')
 def index():
@@ -97,9 +94,14 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' in session:
-        return render_template('dashboard.html')
+        return render_template('dashboard.html', target_section=request.args.get('target'))
     elif 'admin_id' in session:
-        return render_template('admin_dashboard.html', user_data=None)
+        conn = sqlite3.connect(DB_REGISTER_NAME)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username FROM registered_users")
+        user_data = cursor.fetchall()
+        conn.close()
+        return render_template('admin_dashboard.html', user_data=user_data, target_section=request.args.get('target'))
     else:
         return redirect(url_for('index'))
 
@@ -149,7 +151,7 @@ def register():
         conn.commit()
         conn.close()
         flash("Registration successful. You can now log in.", 'success')
-    return redirect(url_for('index'))
+    return render_template('login.html')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -204,6 +206,7 @@ def admin_register():
 @app.route('/new-application', methods=['POST'])
 def new_application():
     if request.method == 'POST':
+        # Collect applicant data
         name = request.form.get('name')
         age = request.form.get('age')
         dob = request.form.get('dob')
@@ -214,10 +217,11 @@ def new_application():
         residence = request.form.get('residence')
         permanent = request.form.get('permanent')
         pass_type = request.form.get('pass-type')
-        
+
         # Generate a unique pass ID
-        pass_id = generate_unique_id('EBP-')  # Use your own format or prefix
-        
+        pass_id = generate_unique_id('EBP-')
+        pass_details = fetch_pass_details_from_database(pass_id)
+        # Store applicant data in the database (applicant.db)
         conn = sqlite3.connect(DB_APPLICANT_NAME)
         cursor = conn.cursor()
         insert_query = """
@@ -227,70 +231,120 @@ def new_application():
         cursor.execute(insert_query, (pass_id, name, age, dob, gender, mobile, email, adhar, residence, permanent, pass_type))
         conn.commit()
         conn.close()
-        
-        flash("Application submitted successfully.", 'success')
-        
-        # Redirect to E-Bus Pass page with the unique pass ID
-        return redirect(url_for('submission'))
 
+        # Generate e-bus pass data
+        e_pass_data = {
+            'pass_id': pass_id,
+            'name': name,
+            'gender': gender,
+            'residence': residence,
+            # Include other relevant data
+        }
+
+        # Render the e-pass template and pass the e-bus pass data
+        return redirect(url_for('submission', pass_id=pass_id))
     return render_template('application.html')
 
+@app.route('/submission/<pass_id>')
+def submission(pass_id):
+    return render_template('submission.html', pass_id=pass_id)
 
-@app.route('/submission')
-def submission():
-    return render_template('submission.html')
+@app.route('/e_pass', methods=['GET'])
+def e_pass_form():
+    pass_details = request.args.get('pass_details')
+    if pass_details:
+        return render_template('e_pass.html', pass_details=pass_details)
+    else:
+        return "E-Bus Pass not found."
 
-@app.route('/payment', methods=['POST'])
-def payment():
-    if request.method == 'POST':
-        # Process the payment (your payment processing logic here)
-        flash("Payment processed successfully.", 'success')
+@app.route('/payment/<pass_id>', methods=['GET'])
+def payment(pass_id):
+    pass_details = fetch_pass_details_from_database(pass_id)
 
-        pass_id = request.form.get('pass_id')  # Pass ID is required for generating the E-Bus pass
+    if pass_details:
+        return render_template('payment.html', pass_id=pass_id, pass_details=pass_details)
+    else:
+        return "E-Bus Pass not found"
 
-        # Retrieve E-Bus Pass details based on pass_id
-        pass_details = fetch_pass_details(pass_id)
-
-        if pass_details:
-            return render_template('e_pass.html', pass_id=pass_id, pass_details=pass_details)
-        else:
-            return "E-Bus Pass not found."
-
-    return render_template('payment.html')
-
-def fetch_pass_details(pass_id):
-    # Implement a function to retrieve E-Bus Pass details from your database
-    # Replace this with your database query logic
-    pass_details = {
-        "name": "Alwin Selva Kumar",
-        "address": "Chennai",
-        "expiry_date": "2023-10-26",
-        "passenger_sign": "path_to_passenger_sign_image.png",
-        "provider_sign": "path_to_provider_sign_image.png"
-    }
-    return pass_details
-    
-@app.route('/payment', methods=['GET'], endpoint='payment_get')
-def payment_get():
-    return render_template('payment.html')
-
-@app.route('/payment', methods=['POST'], endpoint='payment_post')
-def payment_post():
-    # Process the payment here
-    pass_details = generate_pass_details()  # Replace this with your logic
+@app.route('/generate-pass/<pass_id>', methods=['GET'])
+def generate_pass(pass_id):
+    # Implement the logic to generate the e-bus pass based on the pass_id
+    pass_details = fetch_pass_details_from_database(pass_id)
     if pass_details:
         return render_template('e_pass.html', pass_details=pass_details)
     else:
         return "E-Bus Pass not found"
 
-@app.route('/e_pass', methods=['GET'])
-def e_pass_form():
-    pass_id = request.args.get('pass_id')
-    pass_details = fetch_pass_details(pass_id)
+
+@app.route('/payment', methods=['POST'])
+def payment_post():
+    pass_id = request.form.get('pass_id')  # Get the pass ID from the form
+    pass_details = fetch_pass_details_from_database(pass_id)
+
     if pass_details:
-        return render_template('e_pass.html', pass_id=pass_id, pass_details=pass_details)
+        return render_template('e_pass.html', pass_details=pass_details)
     else:
-        return "E-Bus Pass not found."
+        return "E-Bus Pass not found"
+
+
+def fetch_pass_details_from_database(pass_id):
+    # Implement the logic to retrieve pass details from your database (applicant.db)
+    conn = sqlite3.connect(DB_APPLICANT_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, gender, residence FROM applicants WHERE id = ?", (pass_id,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        pass_id, name, gender, residence = result
+        # You can calculate the expiry date here (for example, add a year to the current date)
+        expiry_date = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+        
+        # You may also have logic to retrieve passenger sign and officer sign
+        passenger_sign = "path_to_passenger_sign_image.png"
+        officer_sign = "path_to_officer_sign_image.png"
+
+        # Construct the pass_details dictionary
+        pass_details = {
+            "pass_id": pass_id,
+            "name": name,
+            "gender": gender,
+            "residence": residence,
+            "expiry_date": expiry_date,
+            "passenger_sign": passenger_sign,
+            "officer_sign": officer_sign
+        }
+        return pass_details
+    else:
+        return None
+
+def fetch_last_submitted_application():
+    conn = sqlite3.connect(DB_APPLICANT_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM applicants ORDER BY id DESC LIMIT 1")
+    result = cursor.fetchone()
+    conn.close()
+    
+    if result:
+        return result[0]  # Return the ID of the last submitted application
+    else:
+        return None
+
+@app.route('/submit-payment', methods=['POST'])
+def submit_payment():
+    # Retrieve the details of the last submitted application from the database
+    pass_id = fetch_last_submitted_application()
+
+    if pass_id:
+        # Fetch the pass details for the last submitted application
+        pass_details = fetch_pass_details_from_database(pass_id)
+
+        if pass_details:
+            return render_template('e_pass.html', pass_details=pass_details)
+        else:
+            return "E-Bus Pass not found"
+    else:
+        return "No recent applications found"
 
 @app.route('/view-applicant-data')
 def view_applicant_data():
@@ -300,6 +354,37 @@ def view_applicant_data():
     applicant_data = cursor.fetchall()
     conn.close()
     return render_template('admin_dashboard.html', applicant_data=applicant_data)
+
+@app.route('/renewal', methods=['GET', 'POST'])
+def renewal():
+    if request.method == 'POST':
+        pass_id = request.form.get('pass_id')
+        pass_details = fetch_pass_details_from_database(pass_id)
+
+        if pass_details:
+            return redirect(url_for('payment', pass_id=pass_id))  # Redirect to the payment page
+        else:
+            flash("Pass ID not found. Please enter a valid Pass ID.", 'danger')
+    
+    return render_template('renewal.html')
+
+@app.route('/generate-renewed-pass/<pass_id>', methods=['GET'])
+def generate_renewed_pass(pass_id):
+    # Implement the logic to generate the renewed e-bus pass based on the pass_id
+    pass_details = fetch_pass_details_from_database(pass_id)
+    if pass_details:
+        # You may have logic to renew the pass (e.g., update the expiration date)
+        renewed_pass_details = pass_details  # You can modify this based on your actual logic
+        return render_template('renewed.html', pass_details=renewed_pass_details)
+    else:
+        flash("E-Bus Pass not found.", 'danger')
+        return redirect(url_for('renewal'))
+
+@app.route('/renewed', methods=['GET'])
+def renewed():
+    # This route can display the renewed pass details (e.g., after a successful renewal)
+    # You can use the "generate_renewed_pass" route and template for this purpose.
+    return "Renewed Pass Details"    
 
 @app.route('/logout')
 def logout():

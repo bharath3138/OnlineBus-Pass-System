@@ -5,75 +5,71 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #33ccff, #ff99cc, #33ccff, #ff99cc);
-            text-align: center;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: hidden; /* Prevent horizontal scrolling */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        /* Background animation */
-        .animated-bg {
+        /* Sea wave background animation */
+        .sea-wave-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -1; /* Move the background behind the content */
             background: linear-gradient(45deg, #33ccff, #ff99cc, #33ccff, #ff99cc);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
+            background-size: 200% 100%;
+            animation: waveAnimation 5s linear infinite;
         }
 
-        @keyframes gradientAnimation {
+        @keyframes waveAnimation {
             0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
+                background-position: 100% 0;
             }
             100% {
-                background-position: 0% 50%;
+                background-position: -100% 0;
             }
         }
 
         h1 {
-            color: #333;
+            font-size: 24px;
+            text-align: center;
+            z-index: 2;
+            position: relative;
         }
 
-        /* Add some animation to the E-Pass form */
+        h2 {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            text-decoration: underline;
+            z-index: 2;
+            position: relative;
+        }
+
         form {
-            margin: 20px auto;
             max-width: 400px;
             padding: 20px;
-            background-color: #fff;
+            background-color: whitesmoke;
             border-radius: 10px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+            z-index: 2;
+            display: none; /* Initially hide the form */
         }
 
-        /* Add animation keyframes */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        p {
+            margin: 5px 0;
+            font-size: 16px;
         }
 
-        label {
+        strong {
             font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
         }
 
         img {
@@ -81,53 +77,50 @@
             height: auto;
             display: block;
             margin: 10px auto;
-            animation: fadeIn 1s ease-in-out;
         }
 
-        a {
+        /* Styling for the button */
+        #showFormButton {
             display: block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #007bff;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        /* Add hover effect to the back to dashboard link */
-        a:hover {
-            text-decoration: underline;
+        #showFormButton:hover {
+            background-color: salmon;
         }
     </style>
 </head>
 <body>
-    <body>
-        <h1>E-Bus Pass</h1>
-        <form action="submit_pass.php" method="post">
-            <label for="pass_id"><strong>Pass ID:</strong></label>
-            <input type="text" id="pass_id" name="pass_id" value="{{ pass_details['pass_id'] }}" readonly><br>
-    
-            <label for="name"><strong>Name:</strong></label>
-            <input type="text" id="name" name="name" value="{{ pass_details['name'] }}" readonly><br>
-    
-            <label for="gender"><strong>Gender:</strong></label>
-            <input type="text" id="gender" name="gender" value="{{ pass_details['gender'] }}" readonly><br>
-    
-            <label for="residence"><strong>Residence Address:</strong></label>
-            <input type="text" id="residence" name="residence" value="{{ pass_details['residence'] }}" readonly><br>
-    
-            <label for="expiry_date"><strong>Expiry Date:</strong></label>
-            <input type="text" id="expiry_date" name="expiry_date" value="{{ pass_details['expiry_date'] }}" readonly><br>
-    
-            <label for="passenger_sign"><strong>Passenger Sign:</strong></label>
-            <img src="{{ pass_details['passenger_sign'] }}" alt="Passenger Sign"><br>
-    
-            <label for="officer_sign"><strong>Officer Sign:</strong></label>
-            <img src="{{ pass_details['officer_sign'] }}" alt="Officer Sign"><br>
-    
-        </form>
-    </body>
+    <div class="sea-wave-bg"></div>
+    <h1>E-Bus Pass</h1>
+    <button id="showFormButton">Click to Show Your E-Pass</button>
+    <form id="ePassForm">
+        <h2> E-Bus Pass</h2>
+        <p><strong>Pass ID:</strong> {{ pass_details['pass_id'] }}</p>
+        <p><strong>Name:</strong> {{ pass_details['name'] }}</p>
+        <p><strong>Gender:</strong> {{ pass_details['gender'] }}</p>
+        <p><strong>Residence Address:</strong> {{ pass_details['residence'] }}</p>
+        <p><strong>Expiry Date:</strong> {{ pass_details['expiry_date'] }}</p>
+        <p><strong>Passenger Sign:</strong> <img src="{{ pass_details['passenger_sign'] }}" alt="Passenger Sign"></p>
+        <p><strong>Officer Sign:</strong> <img src="{{ pass_details['officer_sign'] }}" alt="Officer Sign"></p>
+    </form>
 
     <script>
-        // JavaScript to show the E-Pass form when the page loads
-        document.getElementById('pass-details').style.display = 'block';
+        // JavaScript to toggle the visibility of the form when the button is clicked
+        const showFormButton = document.getElementById('showFormButton');
+        const ePassForm = document.getElementById('ePassForm');
+
+        showFormButton.addEventListener('click', () => {
+            ePassForm.style.display = 'block'; // Show the form
+            showFormButton.style.display = 'none'; // Hide the button
+        });
     </script>
 </body>
 </html>
